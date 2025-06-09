@@ -4,6 +4,11 @@
 #include <time.h>
 #define MAX_POS 7
 #define MIN_POS 0
+#define MOOD_MAX 3
+#define MOOD_MIN 0
+#define FRIEND_MAX 4
+#define FRIEND_MIN 0
+
 
 int m(int p, int z) {
 	p += z;
