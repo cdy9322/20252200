@@ -9,339 +9,353 @@
 #define FRIEND_MAX 4
 #define FRIEND_MIN 0
 
-
 int m(int p, int z) {
-	p += z;
-	if (p < MIN_POS) p = MIN_POS;
-	if (p > MAX_POS) p = MAX_POS;
-	return p;
+    p += z;
+    if (p < MIN_POS) p = MIN_POS;
+    if (p > MAX_POS) p = MAX_POS;
+    return p;
 }
+
+int random_obj_pos(int except1, int except2) {
+    int pos;
+    do {
+        pos = rand() % (MAX_POS - 1) + 1; // 1~6
+    } while (pos == except1 || pos == except2);
+    return pos;
+}
+
 int main(void)
 {
-	int s = 0, f = 2; //수프,친밀도
-	int p = 0; //이동
-	int q = 0; //발자국
-	int x = 0; //이동 여부
-int mood = 3; // 기분(0~3)
-int cp = 0; // CP
-int owned_mouse = 0, owned_laser = 0, owned_scratcher = 0, owned_cattower = 0;
-int scratcher_pos = 0, cattower_pos = 0;
-int turn = 0;
-	srand((unsigned int)time(NULL));
-	while (1) {
-turn++;
-		printf("      /\\_/\\ \n");
-		printf(" /\\  / o o \\ \n");
-		printf("//\\\\ \\~(*)~/ \n");
-		printf("   \\/   ^ / \n");
-		printf("   | \\|| || \n");
-		printf("   \\ '|| || \n");
-		printf("    \\)()-()) \n");
-		Sleep(500);
+    int s = 0, f = 2; // 수프, 친밀도
+    int p = 0; // 현 위치
+    int q = 0; // 이전 위치
+    int mood = 3; // 기분(0~3)
+    int cp = 0; // CP
+    int owned_mouse = 0, owned_laser = 0, owned_scratcher = 0, owned_cattower = 0;
+    int scratcher_pos = 0, cattower_pos = 0;
+    int turn = 0;
+    srand((unsigned int)time(NULL));
 
-		printf("==================== 현재 상태 ====================\n");
-printf("쫀떡이는 식빵을 굽고 있습니다.\n");
-printf("지금까지 만든 수프 갯수: %d개\n", s);
-printf("CP: %d 포인트\n", cp);
-printf("쫀떡이 기분(0~3): %d\n", mood);
-if (mood == 0) printf("기분이 매우 나쁩니다.\n");
-else if (mood == 1) printf("심심해합니다.\n");
-else if (mood == 2) printf("식빵을 굽습니다.\n");
-else if (mood == 3) printf("골골송을 부릅니다.\n");
+    while (1) {
+        turn++;
+        printf("      /\\_/\\ \n");
+        printf(" /\\  / o o \\ \n");
+        printf("//\\\\ \\~(*)~/ \n");
+        printf("   \\/   ^ / \n");
+        printf("   | \\|| || \n");
+        printf("   \\ '|| || \n");
+        printf("    \\)()-()) \n");
+        Sleep(500);
 
-if (f < 0) f = 0;
-if (f > 4) f = 4;
-printf("집사와의 관계(0~4): %d\n", f);
-if (f == 0) printf("곁에 오는것도 싫어합니다.\n");
-else if (f == 1) printf("간식 자판기 취급입니다.\n");
-else if (f == 2) printf("그럭저럭 쓸 만한 집사입니다.\n");
-else if (f == 3) printf("훌륭한 집사로 인정 받고 있습니다.\n");
-else if (f == 4) printf("집사 껌딱지입니다.\n");
-printf("===================================================\n\n");
-		Sleep(500);
+        printf("==================== 현재 상태 ====================\n");
+        printf("쫀떡이는 식빵을 굽고 있습니다.\n");
+        printf("지금까지 만든 수프 갯수: %d개\n", s);
+        printf("CP: %d 포인트\n", cp);
+        printf("쫀떡이 기분(0~3): %d\n", mood);
+        if (mood == 0) printf("기분이 매우 나쁩니다.\n");
+        else if (mood == 1) printf("심심해합니다.\n");
+        else if (mood == 2) printf("식빵을 굽습니다.\n");
+        else if (mood == 3) printf("골골송을 부릅니다.\n");
+        if (f < 0) f = 0;
+        if (f > 4) f = 4;
+        printf("집사와의 관계(0~4): %d\n", f);
+        if (f == 0) printf("곁에 오는것도 싫어합니다.\n");
+        else if (f == 1) printf("간식 자판기 취급입니다.\n");
+        else if (f == 2) printf("그럭저럭 쓸 만한 집사입니다.\n");
+        else if (f == 3) printf("훌륭한 집사로 인정 받고 있습니다.\n");
+        else if (f == 4) printf("집사 껌딱지입니다.\n");
+        printf("===================================================\n\n");
+        Sleep(500);
 
-printf("주사위가 %d 이하이면 기분이 나빠집니다.\n", 6 - f);
-printf("주사위를 굴립니다. 또르륵...\n");
-int dice = rand() % 6 + 1;
-printf("%d이(가) 나왔습니다!\n", dice);
-if (dice <= 6 - f) {
-    printf("쫀떡의 기분이 나빠집니다: %d -> ", mood);
-    mood--;
-    if (mood < MOOD_MIN) mood = MOOD_MIN;
-    printf("%d\n", mood);
-}
-else {
-    printf("다행히 기분은 그대로입니다.\n");
-}
-Sleep(500);
-q = p; // 이전 위치 저장
+        // 기분 변화 주사위
+        printf("주사위가 %d 이하이면 기분이 나빠집니다.\n", 6 - f);
+        printf("주사위를 굴립니다. 또르륵...\n");
+        int dice = rand() % 6 + 1;
+        printf("%d이(가) 나왔습니다!\n", dice);
+        if (dice <= 6 - f) {
+            printf("쫀떡의 기분이 나빠집니다: %d -> ", mood);
+            mood--;
+            if (mood < MOOD_MIN) mood = MOOD_MIN;
+            printf("%d\n", mood);
+        }
+        else {
+            printf("다행히 기분은 그대로입니다.\n");
+        }
 
-if (mood == 0) {
-    // 기분 매우 나쁨: 집으로
-    if (p > 0) {
-        p = m(p, -1);
-        printf("기분이 매우 나쁜 쫀떡은 집으로 향합니다.\n");
-    }
-    else printf("쫀떡은 자신의 집에서 웅크리고 있습니다.\n");
-}
-else if (mood == 1) {
-    // 심심: 놀이기구로
-    if (owned_scratcher || owned_cattower) {
-        int to = 0, dist1 = 99, dist2 = 99;
-        if (owned_scratcher) dist1 = abs(p - scratcher_pos);
-        if (owned_cattower) dist2 = abs(p - cattower_pos);
-        if (dist1 <= dist2) to = scratcher_pos;
-        else to = cattower_pos;
-        if (p < to) p++;
-        else if (p > to) p--;
-        printf("쫀떡은 심심해서 놀이기구 쪽으로 이동합니다.\n");
-    }
-    else {
-        printf("놀 거리가 없어서 기분이 매우 나빠집니다!\n");
-        mood = 0;
-    }
-}
-else if (mood == 2) {
-    printf("쫀떡은 기분 좋게 식빵을 굽고 있습니다.\n");
-}
-else if (mood == 3) {
-    // 골골송: 냄비로 이동
-    if (p < MAX_POS) {
-        p = m(p, 1);
-        printf("쫀떡은 골골송을 부르며 수프를 만들러 갑니다.\n");
-    }
-    else printf("쫀떡은 냄비 옆에 있습니다.\n");
-}
-Sleep(500)
-		if (p == 0 && turn > 1) {
-    if (mood < MOOD_MAX) {
-        printf("쫀떡이 집에서 한 턴을 쉬며 기분이 좋아집니다: %d -> %d\n", mood, mood + 1);
-        mood++;
-    }
-}
-if (p == MAX_POS) {
-    int r = rand() % 3 + 1;
-    if (r == 1) printf("쫀떡이(가) 감자 수프를 만들었습니다!\n");
-    else if (r == 2) printf("쫀떡이(가) 양송이 수프를 만들었습니다!\n");
-    else printf("쫀떡이(가) 브로콜리 수프를 만들었습니다!\n");
-    s += 1;
-}
+        Sleep(500);
 
-if (owned_scratcher && p == scratcher_pos) {
-    if (mood < MOOD_MAX) {
-        printf("쫀떡이 스크래처를 긁고 놀았습니다. 기분이 조금 좋아졌습니다: %d -> %d\n", mood, mood + 1);
-        mood++;
-    }
-    else {
-        printf("쫀떡이 스크래처를 긁고 놀았습니다. 기분은 이미 최대치입니다.\n");
-    }
-}
-if (owned_cattower && p == cattower_pos) {
-    if (mood < MOOD_MAX - 1) {
-        printf("쫀떡이 캣타워를 뛰어다닙니다. 기분이 제법 좋아졌습니다: %d -> %d\n", mood, mood + 2);
-        mood += 2;
-        if (mood > MOOD_MAX) mood = MOOD_MAX;
-    }
-    else if (mood < MOOD_MAX) {
-        printf("쫀떡이 캣타워를 뛰어다닙니다. 기분이 제법 좋아졌습니다: %d -> %d\n", mood, mood + 1);
-        mood++;
-    }
-    else {
-        printf("쫀떡이 캣타워를 뛰어다닙니다. 기분은 이미 최대치입니다.\n");
-    }
-}
+        // 이동 및 행동
+        q = p; // 이전 위치 저장
+        if (mood == 0) {
+            if (p > 0) {
+                p = m(p, -1);
+                printf("기분이 매우 나쁜 쫀떡은 집으로 향합니다.\n");
+            }
+            else printf("쫀떡은 자신의 집에서 웅크리고 있습니다.\n");
+        }
+        else if (mood == 1) {
+            if (owned_scratcher || owned_cattower) {
+                int to = 0, dist1 = 99, dist2 = 99;
+                if (owned_scratcher) dist1 = abs(p - scratcher_pos);
+                if (owned_cattower) dist2 = abs(p - cattower_pos);
+                if (dist1 <= dist2) to = scratcher_pos;
+                else to = cattower_pos;
+                if (p < to) p++;
+                else if (p > to) p--;
+                printf("쫀떡은 심심해서 놀이기구 쪽으로 이동합니다.\n");
+            }
+            else {
+                printf("놀 거리가 없어서 기분이 매우 나빠집니다!\n");
+                mood = 0;
+            }
+        }
+        else if (mood == 2) {
+            printf("쫀떡은 기분 좋게 식빵을 굽고 있습니다.\n");
+        }
+        else if (mood == 3) {
+            if (p < MAX_POS) {
+                p = m(p, 1);
+                printf("쫀떡은 골골송을 부르며 수프를 만들러 갑니다.\n");
+            }
+            else printf("쫀떡은 냄비 옆에 있습니다.\n");
+        }
+        Sleep(500);
 
-		Sleep(500);
-		printf("##########\n");
-printf("#");
-for (int j = 0; j <= MAX_POS; j++) {
-    if (j == 0)
-        printf("H");
-    else if (j == MAX_POS)
-        printf("B");
-    else if (owned_scratcher && scratcher_pos == j)
-        printf("S");
-    else if (owned_cattower && cattower_pos == j)
-        printf("T");
-    else
-        printf(" ");
-}
-printf("#\n");
-printf("#");
-for (int j = 0; j <= MAX_POS; j++) {
-    if (j == p) {
-        printf("C");
-    }
-    else if (j == q && p != q) {
-        printf(".");
-    }
-    else {
-        printf(" ");
-    }
-}
-printf("#\n");
+        // 행동
+        if (p == 0 && turn > 1) {
+            if (mood < MOOD_MAX) {
+                printf("쫀떡이 집에서 한 턴을 쉬며 기분이 좋아집니다: %d -> %d\n", mood, mood + 1);
+                mood++;
+            }
+        }
+        if (p == MAX_POS) {
+            int r = rand() % 3 + 1;
+            if (r == 1) printf("쫀떡이(가) 감자 수프를 만들었습니다!\n");
+            else if (r == 2) printf("쫀떡이(가) 양송이 수프를 만들었습니다!\n");
+            else printf("쫀떡이(가) 브로콜리 수프를 만들었습니다!\n");
+            s += 1;
+        }
 
-printf("##########\n");
-printf("===================================================\n\n");
-		Sleep(500);
+        if (owned_scratcher && p == scratcher_pos) {
+            if (mood < MOOD_MAX) {
+                printf("쫀떡이 스크래처를 긁고 놀았습니다. 기분이 조금 좋아졌습니다: %d -> %d\n", mood, mood + 1);
+                mood++;
+            }
+            else {
+                printf("쫀떡이 스크래처를 긁고 놀았습니다. 기분은 이미 최대치입니다.\n");
+            }
+        }
+        if (owned_cattower && p == cattower_pos) {
+            if (mood < MOOD_MAX - 1) {
+                printf("쫀떡이 캣타워를 뛰어다닙니다. 기분이 제법 좋아졌습니다: %d -> %d\n", mood, mood + 2);
+                mood += 2;
+                if (mood > MOOD_MAX) mood = MOOD_MAX;
+            }
+            else if (mood < MOOD_MAX) {
+                printf("쫀떡이 캣타워를 뛰어다닙니다. 기분이 제법 좋아졌습니다: %d -> %d\n", mood, mood + 1);
+                mood++;
+            }
+            else {
+                printf("쫀떡이 캣타워를 뛰어다닙니다. 기분은 이미 최대치입니다.\n");
+            }
+        }
 
+        printf("===================================================\n\n");
+        Sleep(500);
 
-		int g, d = rand() % 6 + 1;
-printf("어떤 상호작용을 하시겠습니까?\n");
-printf("0. 아무것도 하지 않음 1. 긁어 주기");
-int menu_idx = 1;
-if (owned_mouse) { menu_idx++; printf(" %d. 장난감 쥐로 놀아주기", menu_idx); }
-if (owned_laser) { menu_idx++; printf(" %d. 레이저 포인터로 놀아주기", menu_idx); }
-printf("\n>> "); scanf_s("%d", &g);
-while (g < 0 || g > menu_idx) {
-    printf(">> "); scanf_s("%d", &g);
-}
+        // 방 그리기
+        printf("##########\n");
+        printf("#");
+        for (int j = 0; j <= MAX_POS; j++) {
+            if (j == 0)
+                printf("H");
+            else if (j == MAX_POS)
+                printf("B");
+            else if (owned_scratcher && scratcher_pos == j)
+                printf("S");
+            else if (owned_cattower && cattower_pos == j)
+                printf("T");
+            else
+                printf(" ");
+        }
+        printf("#\n");
+        printf("#");
+        for (int j = 0; j <= MAX_POS; j++) {
+            if (j == p) {
+                printf("C");
+            }
+            else if (j == q && p != q) {
+                printf(".");
+            }
+            else {
+                printf(" ");
+            }
+        }
+        printf("#\n");
 
-if (g == 0) {
-    printf("아무것도 하지 않습니다.\n");
-    printf("기분이 1 감소합니다: %d -> %d\n", mood, (mood - 1 < 0 ? 0 : mood - 1));
-    mood--; if (mood < MOOD_MIN) mood = MOOD_MIN;
-    printf("주사위가 5 이하이면 친밀도가 감소합니다.\n");
-    printf("주사위를 굴립니다. 또르륵...\n");
-    printf("%d이(가) 나왔습니다!\n", d);
-    if (d <= 5) {
-        printf("친밀도가 떨어집니다: %d -> %d\n", f, (f - 1 < 0 ? 0 : f - 1));
-        f--; if (f < FRIEND_MIN) f = FRIEND_MIN;
-    }
-    else {
-        printf("다행히 친밀도는 그대로입니다.\n");
-    }
-}
-else if (g == 1) {
-    if (mood < MOOD_MAX) {
-        printf("쫀떡의 턱을 긁어주었습니다. 기분이 좋아졌습니다: %d -> %d\n", mood, mood + 1);
-        mood++;
-    }
-    else {
-        printf("쫀떡의 턱을 긁어주었습니다. 기분은 이미 최대치입니다.\n");
-    }
-    printf("주사위가 5 이상이면 친밀도가 증가합니다.\n");
-    printf("주사위를 굴립니다. 또르륵...\n");
-    printf("%d이(가) 나왔습니다!\n", d);
-    if (d >= 5) {
-        printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
-        f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
-    }
-    else {
-        printf("친밀도는 그대로입니다.\n");
-    }
-}
-else if (g == 2 && owned_mouse) {
-    if (mood < MOOD_MAX) {
-        printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분이 조금 좋아졌습니다: %d->%d\n", mood, mood + 1);
-        mood++;
-    }
-    else {
-        printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분은 이미 최대치입니다.\n");
-    }
-    printf("주사위가 4 이상이면 친밀도가 증가합니다.\n");
-    printf("주사위를 굴립니다. 또르륵...\n");
-    printf("%d이(가) 나왔습니다!\n", d);
-    if (d >= 4) {
-        printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
-        f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
-    }
-    else {
-        printf("친밀도는 그대로입니다.\n");
-    }
-}
-else if (((g == 3 && owned_laser) || (g == 2 && !owned_mouse && owned_laser))) {
-    int up = (mood <= MOOD_MAX - 2) ? 2 : MOOD_MAX - mood;
-    if (up > 0) {
-        printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분이 꽤 좋아졌습니다: %d->%d\n", mood, mood + up);
-        mood += up;
-    }
-    else {
-        printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분은 이미 최대치입니다.\n");
-    }
-    printf("주사위가 2 이상이면 친밀도가 증가합니다.\n");
-    printf("주사위를 굴립니다. 또르륵...\n");
-    printf("%d이(가) 나왔습니다!\n", d);
-    if (d >= 2) {
-        printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
-        f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
-    }
-    else {
-        printf("친밀도는 그대로입니다.\n");
-    }
-}
-printf("===================================================\n\n");
-			Sleep(500);
-		}
-int gain = ((mood - 1) > 0 ? (mood - 1) : 0) + f;
-printf("쫀떡의 기분과 친밀도에 따라 CP가 %d 포인트 생산되었습니다.\n", gain);
-cp += gain;
-printf("보유 CP: %d 포인트\n", cp);
-printf("\n상점에서 물건을 살 수 있습니다. 무엇을 구매하시겠습니까?\n");
-printf("0. 아무 것도 사지 않는다.\n");
-printf("1. 장난감 쥐: 1CP %s\n", owned_mouse ? "(품절)" : "");
-printf("2. 레이저 포인터: 2CP %s\n", owned_laser ? "(품절)" : "");
-printf("3. 스크래처: 4CP %s\n", owned_scratcher ? "(품절)" : "");
-printf("4. 캣 타워: 6CP %s\n", owned_cattower ? "(품절)" : "");
-int shop;
-printf(">> "); scanf_s("%d", &shop);
-while (shop < 0 || shop > 4) {
-    printf(">> "); scanf_s("%d", &shop);
-}
-if (shop == 1) {
-    if (owned_mouse) printf("장난감 쥐는 이미 구매했습니다.\n");
-    else if (cp < 1) printf("CP가 부족합니다.\n");
-    else {
-        owned_mouse = 1; cp -= 1;
-        printf("장난감 쥐를 구매했습니다. 남은 CP: %d 포인트\n", cp);
-    }
-}
-if (shop == 2) {
-    if (owned_laser) printf("레이저 포인터는 이미 구매했습니다.\n");
-    else if (cp < 2) printf("CP가 부족합니다.\n");
-    else {
-        owned_laser = 1; cp -= 2;
-        printf("레이저 포인터를 구매했습니다. 남은 CP: %d 포인트\n", cp);
-    }
-}
-if (shop == 3) {
-    if (owned_scratcher) printf("스크래처는 이미 구매했습니다.\n");
-    else if (cp < 4) printf("CP가 부족합니다.\n");
-    else {
-        owned_scratcher = 1; cp -= 4;
-        scratcher_pos = random_obj_pos(cattower_pos, 0);
-        printf("스크래처를 구매해 설치했습니다. 남은 CP: %d 포인트\n", cp);
-    }
-}
-if (shop == 4) {
-    if (owned_cattower) printf("캣 타워는 이미 구매했습니다.\n");
-    else if (cp < 6) printf("CP가 부족합니다.\n");
-    else {
-        owned_cattower = 1; cp -= 6;
-        cattower_pos = random_obj_pos(scratcher_pos, 0);
-        printf("캣 타워를 구매해 설치했습니다. 남은 CP: %d 포인트\n", cp);
-    }
-}
-printf("===================================================\n\n");
+        printf("##########\n");
+        printf("===================================================\n\n");
+        Sleep(500);
 
-if (turn == 3) {
-    printf("\n==== 돌발 퀘스트! ====\n");
-    printf("쫀떡이가 도망쳤습니다! 어디에 숨었을까요? (숫자를 정답칸에 써주세요.)\n");
-    printf("1.화장실, 2.옷장 안, 3.침대 밑, 4.식탁 밑 \n");
-    int answer = rand() % 4 + 1, guess;
-    printf(">> "); scanf_s("%d", &guess);
-    if (guess == answer) {
-        printf("정답! 보상으로 CP 2포인트를 획득합니다!\n");
-        cp += 2;
+        // 상호작용
+        int g, d = rand() % 6 + 1;
+        printf("어떤 상호작용을 하시겠습니까?\n");
+        printf("0. 아무것도 하지 않음 1. 긁어 주기");
+        int menu_idx = 1;
+        if (owned_mouse) { menu_idx++; printf(" %d. 장난감 쥐로 놀아주기", menu_idx); }
+        if (owned_laser) { menu_idx++; printf(" %d. 레이저 포인터로 놀아주기", menu_idx); }
+        printf("\n>> "); scanf_s("%d", &g);
+        while (g < 0 || g > menu_idx) {
+            printf(">> "); scanf_s("%d", &g);
+        }
+        if (g == 0) {
+            printf("아무것도 하지 않습니다.\n");
+            printf("기분이 1 감소합니다: %d -> %d\n", mood, (mood - 1 < 0 ? 0 : mood - 1));
+            mood--; if (mood < MOOD_MIN) mood = MOOD_MIN;
+            printf("주사위가 5 이하이면 친밀도가 감소합니다.\n");
+            printf("주사위를 굴립니다. 또르륵...\n");
+            printf("%d이(가) 나왔습니다!\n", d);
+            if (d <= 5) {
+                printf("친밀도가 떨어집니다: %d -> %d\n", f, (f - 1 < 0 ? 0 : f - 1));
+                f--; if (f < FRIEND_MIN) f = FRIEND_MIN;
+            }
+            else {
+                printf("다행히 친밀도는 그대로입니다.\n");
+            }
+        }
+        else if (g == 1) {
+            if (mood < MOOD_MAX) {
+                printf("쫀떡의 턱을 긁어주었습니다. 기분이 좋아졌습니다: %d -> %d\n", mood, mood + 1);
+                mood++;
+            }
+            else {
+                printf("쫀떡의 턱을 긁어주었습니다. 기분은 이미 최대치입니다.\n");
+            }
+            printf("주사위가 5 이상이면 친밀도가 증가합니다.\n");
+            printf("주사위를 굴립니다. 또르륵...\n");
+            printf("%d이(가) 나왔습니다!\n", d);
+            if (d >= 5) {
+                printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
+                f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
+            }
+            else {
+                printf("친밀도는 그대로입니다.\n");
+            }
+        }
+
+        else if (g == 2 && owned_mouse) {
+            if (mood < MOOD_MAX) {
+                printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분이 조금 좋아졌습니다: %d->%d\n", mood, mood + 1);
+                mood++;
+            }
+            else {
+                printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분은 이미 최대치입니다.\n");
+            }
+            printf("주사위가 4 이상이면 친밀도가 증가합니다.\n");
+            printf("주사위를 굴립니다. 또르륵...\n");
+            printf("%d이(가) 나왔습니다!\n", d);
+            if (d >= 4) {
+                printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
+                f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
+            }
+            else {
+                printf("친밀도는 그대로입니다.\n");
+            }
+        }
+
+        else if (((g == 3 && owned_laser) || (g == 2 && !owned_mouse && owned_laser))) {
+            int up = (mood <= MOOD_MAX - 2) ? 2 : MOOD_MAX - mood;
+            if (up > 0) {
+                printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분이 꽤 좋아졌습니다: %d->%d\n", mood, mood + up);
+                mood += up;
+            }
+            else {
+                printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분은 이미 최대치입니다.\n");
+            }
+            printf("주사위가 2 이상이면 친밀도가 증가합니다.\n");
+            printf("주사위를 굴립니다. 또르륵...\n");
+            printf("%d이(가) 나왔습니다!\n", d);
+            if (d >= 2) {
+                printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
+                f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
+            }
+            else {
+                printf("친밀도는 그대로입니다.\n");
+            }
+        }
+        printf("===================================================\n\n");
+        Sleep(500);
+
+        // CP 생산
+        int gain = ((mood - 1) > 0 ? (mood - 1) : 0) + f;
+        printf("쫀떡의 기분과 친밀도에 따라 CP가 %d 포인트 생산되었습니다.\n", gain);
+        cp += gain;
+        printf("보유 CP: %d 포인트\n", cp);
+
+        // 상점
+        printf("\n상점에서 물건을 살 수 있습니다. 무엇을 구매하시겠습니까?\n");
+        printf("0. 아무 것도 사지 않는다.\n");
+        printf("1. 장난감 쥐: 1CP %s\n", owned_mouse ? "(품절)" : "");
+        printf("2. 레이저 포인터: 2CP %s\n", owned_laser ? "(품절)" : "");
+        printf("3. 스크래처: 4CP %s\n", owned_scratcher ? "(품절)" : "");
+        printf("4. 캣 타워: 6CP %s\n", owned_cattower ? "(품절)" : "");
+        int shop;
+        printf(">> "); scanf_s("%d", &shop);
+        while (shop < 0 || shop > 4) {
+            printf(">> "); scanf_s("%d", &shop);
+        }
+        if (shop == 1) {
+            if (owned_mouse) printf("장난감 쥐는 이미 구매했습니다.\n");
+            else if (cp < 1) printf("CP가 부족합니다.\n");
+            else {
+                owned_mouse = 1; cp -= 1;
+                printf("장난감 쥐를 구매했습니다. 남은 CP: %d 포인트\n", cp);
+            }
+        }
+        if (shop == 2) {
+            if (owned_laser) printf("레이저 포인터는 이미 구매했습니다.\n");
+            else if (cp < 2) printf("CP가 부족합니다.\n");
+            else {
+                owned_laser = 1; cp -= 2;
+                printf("레이저 포인터를 구매했습니다. 남은 CP: %d 포인트\n", cp);
+            }
+        }
+        if (shop == 3) {
+            if (owned_scratcher) printf("스크래처는 이미 구매했습니다.\n");
+            else if (cp < 4) printf("CP가 부족합니다.\n");
+            else {
+                owned_scratcher = 1; cp -= 4;
+                scratcher_pos = random_obj_pos(cattower_pos, 0);
+                printf("스크래처를 구매해 설치했습니다. 남은 CP: %d 포인트\n", cp);
+            }
+        }
+        if (shop == 4) {
+            if (owned_cattower) printf("캣 타워는 이미 구매했습니다.\n");
+            else if (cp < 6) printf("CP가 부족합니다.\n");
+            else {
+                owned_cattower = 1; cp -= 6;
+                cattower_pos = random_obj_pos(scratcher_pos, 0);
+                printf("캣 타워를 구매해 설치했습니다. 남은 CP: %d 포인트\n", cp);
+            }
+        }
+        printf("===================================================\n\n");
+
+        // 돌발퀘스트
+        if (turn == 3) {
+            printf("\n==== 돌발 퀘스트! ====\n");
+            printf("쫀떡이가 도망쳤습니다! 어디에 숨었을까요? (숫자를 정답칸에 써주세요.)\n");
+            printf("1.화장실, 2.옷장 안, 3.침대 밑, 4.식탁 밑 \n");
+            int answer = rand() % 4 + 1, guess;
+            printf(">> "); scanf_s("%d", &guess);
+            if (guess == answer) {
+                printf("정답! 보상으로 CP 2포인트를 획득합니다!\n");
+                cp += 2;
+            }
+            else printf("틀렸습니다! 정답은 %d번이었습니다.", answer);
+        }
+
+        Sleep(2500);
+        system("cls");
     }
-    else printf("틀렸습니다! 정답은 %d번이었습니다.", answer);
+    return 0;
 }
-
-
-		Sleep(2500);
-		system("cls");
-
-	}
-
-	return 0;
-} 
