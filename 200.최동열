@@ -29,31 +29,24 @@ int main(void)
 		Sleep(500);
 
 		printf("==================== 현재 상태 ====================\n");
-		printf("쫀떡이는 식빵을 굽고 있습니다.\n");
-		printf("지금까지 만든 수프 갯수: %d개\n", s);
-		if (f < 0) {
-			f = 0;
-		}
-		if (f > 4) {
-			f = 4;
-		}
-		printf("집사와의 관계(0~4): %d\n", f);
-		if (f == 0) {
-			printf("곁에 오는것도 싫어합니다.\n");
-		}
-		else if (f == 1) {
-			printf("간식 자판기 취급입니다.\n");
-		}
-		else if (f == 2) {
-			printf("그럭저럭 쓸 만한 집사입니다.\n");
-		}
-		else if (f == 3) {
-			printf("훌륭한 집사로 인정 받고 있습니다.\n");
-		}
-		else if (f == 4) {
-			printf("집사 껌딱지입니다.\n");
-		}
-		printf("===================================================\n\n");
+printf("쫀떡이는 식빵을 굽고 있습니다.\n");
+printf("지금까지 만든 수프 갯수: %d개\n", s);
+printf("CP: %d 포인트\n", cp);
+printf("쫀떡이 기분(0~3): %d\n", mood);
+if (mood == 0) printf("기분이 매우 나쁩니다.\n");
+else if (mood == 1) printf("심심해합니다.\n");
+else if (mood == 2) printf("식빵을 굽습니다.\n");
+else if (mood == 3) printf("골골송을 부릅니다.\n");
+
+if (f < 0) f = 0;
+if (f > 4) f = 4;
+printf("집사와의 관계(0~4): %d\n", f);
+if (f == 0) printf("곁에 오는것도 싫어합니다.\n");
+else if (f == 1) printf("간식 자판기 취급입니다.\n");
+else if (f == 2) printf("그럭저럭 쓸 만한 집사입니다.\n");
+else if (f == 3) printf("훌륭한 집사로 인정 받고 있습니다.\n");
+else if (f == 4) printf("집사 껌딱지입니다.\n");
+printf("===================================================\n\n");
 		Sleep(500);
 		int i = rand() % 6 + 1; //주사위 1~6
 		printf("쫀떡 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n");
