@@ -151,22 +151,36 @@ if (owned_cattower && p == cattower_pos) {
 
 		Sleep(500);
 		printf("##########\n");
-		printf("#H      B#\n");
-		printf("#");
-		for (int j = 0; j <= MAX_POS; j++) {
-			if (j == p) {
-				printf("C");
-			}
-			else if (j == q && p != q) {
-				printf(".");
-			}
-			else {
-				printf(" ");
-			}
-		}
-		printf("#\n");
-		printf("##########\n");
+printf("#");
+for (int j = 0; j <= MAX_POS; j++) {
+    if (j == 0)
+        printf("H");
+    else if (j == MAX_POS)
+        printf("B");
+    else if (owned_scratcher && scratcher_pos == j)
+        printf("S");
+    else if (owned_cattower && cattower_pos == j)
+        printf("T");
+    else
+        printf(" ");
+}
+printf("#\n");
+printf("#");
+for (int j = 0; j <= MAX_POS; j++) {
+    if (j == p) {
+        printf("C");
+    }
+    else if (j == q && p != q) {
+        printf(".");
+    }
+    else {
+        printf(" ");
+    }
+}
+printf("#\n");
 
+printf("##########\n");
+printf("===================================================\n\n");
 		Sleep(500);
 
 
