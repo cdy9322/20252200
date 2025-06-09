@@ -22,6 +22,8 @@ int main(void)
 	int p = 0; //이동
 	int q = 0; //발자국
 	int x = 0; //이동 여부
+int mood = 3; // 기분(0~3)
+int cp = 0; // CP
 int owned_mouse = 0, owned_laser = 0, owned_scratcher = 0, owned_cattower = 0;
 int scratcher_pos = 0, cattower_pos = 0;
 int turn = 0;
