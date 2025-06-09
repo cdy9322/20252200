@@ -322,6 +322,20 @@ if (shop == 4) {
 }
 printf("===================================================\n\n");
 
+if (turn == 3) {
+    printf("\n==== 돌발 퀘스트! ====\n");
+    printf("쫀떡이가 도망쳤습니다! 어디에 숨었을까요? (숫자를 정답칸에 써주세요.)\n");
+    printf("1.화장실, 2.옷장 안, 3.침대 밑, 4.식탁 밑 \n");
+    int answer = rand() % 4 + 1, guess;
+    printf(">> "); scanf_s("%d", &guess);
+    if (guess == answer) {
+        printf("정답! 보상으로 CP 2포인트를 획득합니다!\n");
+        cp += 2;
+    }
+    else printf("틀렸습니다! 정답은 %d번이었습니다.", answer);
+}
+
+
 		Sleep(2500);
 		system("cls");
 
