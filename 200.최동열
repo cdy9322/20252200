@@ -22,6 +22,8 @@ int main(void)
 	int p = 0; //이동
 	int q = 0; //발자국
 	int x = 0; //이동 여부
+int owned_mouse = 0, owned_laser = 0, owned_scratcher = 0, owned_cattower = 0;
+int scratcher_pos = 0, cattower_pos = 0;
 	srand((unsigned int)time(NULL));
 	while (1) {
 		printf("      /\\_/\\ \n");
@@ -68,6 +70,45 @@ else {
     printf("다행히 기분은 그대로입니다.\n");
 }
 Sleep(500);
+q = p; // 이전 위치 저장
+
+if (mood == 0) {
+    // 기분 매우 나쁨: 집으로
+    if (p > 0) {
+        p = m(p, -1);
+        printf("기분이 매우 나쁜 쫀떡은 집으로 향합니다.\n");
+    }
+    else printf("쫀떡은 자신의 집에서 웅크리고 있습니다.\n");
+}
+else if (mood == 1) {
+    // 심심: 놀이기구로
+    if (owned_scratcher || owned_cattower) {
+        int to = 0, dist1 = 99, dist2 = 99;
+        if (owned_scratcher) dist1 = abs(p - scratcher_pos);
+        if (owned_cattower) dist2 = abs(p - cattower_pos);
+        if (dist1 <= dist2) to = scratcher_pos;
+        else to = cattower_pos;
+        if (p < to) p++;
+        else if (p > to) p--;
+        printf("쫀떡은 심심해서 놀이기구 쪽으로 이동합니다.\n");
+    }
+    else {
+        printf("놀 거리가 없어서 기분이 매우 나빠집니다!\n");
+        mood = 0;
+    }
+}
+else if (mood == 2) {
+    printf("쫀떡은 기분 좋게 식빵을 굽고 있습니다.\n");
+}
+else if (mood == 3) {
+    // 골골송: 냄비로 이동
+    if (p < MAX_POS) {
+        p = m(p, 1);
+        printf("쫀떡은 골골송을 부르며 수프를 만들러 갑니다.\n");
+    }
+    else printf("쫀떡은 냄비 옆에 있습니다.\n");
+}
+Sleep(500)
 		int i = rand() % 6 + 1; //주사위 1~6
 		printf("쫀떡 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n");
 		printf("주사위가 %d이상이면 냄비쪽으로 이동합니다.\n", 6 - f);
