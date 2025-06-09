@@ -1,0 +1,167 @@
+#include <stdio.h>
+#include <windows.h>
+#include <stdlib.h>
+#include <time.h>
+#define MAX_POS 7
+#define MIN_POS 0
+
+int m(int p, int z) {
+	p += z;
+	if (p < MIN_POS) p = MIN_POS;
+	if (p > MAX_POS) p = MAX_POS;
+	return p;
+}
+int main(void)
+{
+	int s = 0, f = 2; //수프,친밀도
+	int p = 0; //이동
+	int q = 0; //발자국
+	int x = 0; //이동 여부
+	srand((unsigned int)time(NULL));
+	while (1) {
+		printf("      /\\_/\\ \n");
+		printf(" /\\  / o o \\ \n");
+		printf("//\\\\ \\~(*)~/ \n");
+		printf("   \\/   ^ / \n");
+		printf("   | \\|| || \n");
+		printf("   \\ '|| || \n");
+		printf("    \\)()-()) \n");
+		Sleep(500);
+
+		printf("==================== 현재 상태 ====================\n");
+		printf("쫀떡이는 식빵을 굽고 있습니다.\n");
+		printf("지금까지 만든 수프 갯수: %d개\n", s);
+		if (f < 0) {
+			f = 0;
+		}
+		if (f > 4) {
+			f = 4;
+		}
+		printf("집사와의 관계(0~4): %d\n", f);
+		if (f == 0) {
+			printf("곁에 오는것도 싫어합니다.\n");
+		}
+		else if (f == 1) {
+			printf("간식 자판기 취급입니다.\n");
+		}
+		else if (f == 2) {
+			printf("그럭저럭 쓸 만한 집사입니다.\n");
+		}
+		else if (f == 3) {
+			printf("훌륭한 집사로 인정 받고 있습니다.\n");
+		}
+		else if (f == 4) {
+			printf("집사 껌딱지입니다.\n");
+		}
+		printf("===================================================\n\n");
+		Sleep(500);
+		int i = rand() % 6 + 1; //주사위 1~6
+		printf("쫀떡 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n");
+		printf("주사위가 %d이상이면 냄비쪽으로 이동합니다.\n", 6 - f);
+		printf("주사위를 굴립니다 또르륵...\n");
+		printf("%d이(가) 나왔습니다!\n", i);
+		q = p; //위치 저장
+		if (6 - f <= i) {
+			printf("냄비쪽으로 움직입니다.\n");
+			p = m(p, 1);
+		}
+		else {
+			printf("집쪽으로 움직입니다.\n");
+			p = m(p, -1);
+		}
+		if (p == 0) {
+			printf("쫀떡은(는) 자신의 집에서 편안함을 느낍니다.\n");
+		}
+		else if (p == MAX_POS) {
+			int r = rand() % 3 + 1;//랜덤 수프 재료
+			if (r == 1) {
+				printf("쫀떡이(가) 감자 수프를 만들었습니다!\n");
+				s += 1;
+			}
+			else if (r == 2) {
+				printf("쫀떡이(가) 양송이 수프를 만들었습니다!\n");
+				s += 1;
+			}
+			else if (r == 3) {
+				printf("쫀떡이(가) 브로콜리 수프를 만들었습니다!\n");
+				s += 1;
+			}
+		}
+		Sleep(500);
+		printf("##########\n");
+		printf("#H      B#\n");
+		printf("#");
+		for (int j = 0; j <= MAX_POS; j++) {
+			if (j == p) {
+				printf("C");
+			}
+			else if (j == q && p != q) {
+				printf(".");
+			}
+			else {
+				printf(" ");
+			}
+		}
+		printf("#\n");
+		printf("##########\n");
+
+		Sleep(500);
+
+
+		int g, d = rand() % 6 + 1; //주사위 1~6
+		printf("어떤 상호작용을 하시겠습니까?  0.아무것도 하지 않음 1.긁어 주기\n");
+		printf(">> "); scanf_s("%d", &g);
+		if (g != 1 && g != 0) {
+			while (g != 0 && g != 1) {
+				printf(">> "); scanf_s("%d", &g);
+			}
+		}
+		if (g == 0) {
+			printf("아무것도 하지 않습니다.\n");
+			printf("4/6확률로 친밀도가 떨어집니다.\n");
+			printf("주사위를 굴립니다 또르르륵.\n");
+			printf("%d이(가) 나왔습니다!\n", d);
+			if (d >= 5) {
+				printf("다행히 친밀도가 떨어지지 않았습니다.\n");
+			}
+			else {
+				printf("친밀도가 떨어집니다.\n");
+				f -= 1;
+			}
+			if (f < 0) {
+				f = 0;
+			}
+			if (f > 4) {
+				f = 4;
+			}
+			printf("현재 친밀도:%d\n", f);
+		}
+		else if (g == 1) {
+			printf("쫀떡의 턱을 긁어주었습니다.\n");
+			printf("2/6확률로 친밀도가 높아집니다.\n");
+			printf("주사위를 굴립니다 또르르륵.\n");
+			printf("%d이(가) 나왔습니다!\n", d);
+			if (d >= 5) {
+				printf("친밀도가 높아집니다.\n");
+				f += 1;
+			}
+			else {
+				printf("친밀도는 그대로입니다.\n");
+			}
+			if (f < 0) {
+				f = 0;
+			}
+			if (f > 4) {
+				f = 4;
+			}
+			printf("현재 친밀도:%d\n", f);
+			Sleep(500);
+		}
+
+		Sleep(2500);
+		system("cls");
+
+	}
+
+	return 0;
+}
