@@ -48,6 +48,21 @@ else if (f == 3) printf("훌륭한 집사로 인정 받고 있습니다.\n");
 else if (f == 4) printf("집사 껌딱지입니다.\n");
 printf("===================================================\n\n");
 		Sleep(500);
+
+printf("주사위가 %d 이하이면 기분이 나빠집니다.\n", 6 - f);
+printf("주사위를 굴립니다. 또르륵...\n");
+int dice = rand() % 6 + 1;
+printf("%d이(가) 나왔습니다!\n", dice);
+if (dice <= 6 - f) {
+    printf("쫀떡의 기분이 나빠집니다: %d -> ", mood);
+    mood--;
+    if (mood < MOOD_MIN) mood = MOOD_MIN;
+    printf("%d\n", mood);
+}
+else {
+    printf("다행히 기분은 그대로입니다.\n");
+}
+Sleep(500);
 		int i = rand() % 6 + 1; //주사위 1~6
 		printf("쫀떡 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n");
 		printf("주사위가 %d이상이면 냄비쪽으로 이동합니다.\n", 6 - f);
