@@ -184,53 +184,91 @@ printf("===================================================\n\n");
 		Sleep(500);
 
 
-		int g, d = rand() % 6 + 1; //주사위 1~6
-		printf("어떤 상호작용을 하시겠습니까?  0.아무것도 하지 않음 1.긁어 주기\n");
-		printf(">> "); scanf_s("%d", &g);
-		if (g != 1 && g != 0) {
-			while (g != 0 && g != 1) {
-				printf(">> "); scanf_s("%d", &g);
-			}
-		}
-		if (g == 0) {
-			printf("아무것도 하지 않습니다.\n");
-			printf("4/6확률로 친밀도가 떨어집니다.\n");
-			printf("주사위를 굴립니다 또르르륵.\n");
-			printf("%d이(가) 나왔습니다!\n", d);
-			if (d >= 5) {
-				printf("다행히 친밀도가 떨어지지 않았습니다.\n");
-			}
-			else {
-				printf("친밀도가 떨어집니다.\n");
-				f -= 1;
-			}
-			if (f < 0) {
-				f = 0;
-			}
-			if (f > 4) {
-				f = 4;
-			}
-			printf("현재 친밀도:%d\n", f);
-		}
-		else if (g == 1) {
-			printf("쫀떡의 턱을 긁어주었습니다.\n");
-			printf("2/6확률로 친밀도가 높아집니다.\n");
-			printf("주사위를 굴립니다 또르르륵.\n");
-			printf("%d이(가) 나왔습니다!\n", d);
-			if (d >= 5) {
-				printf("친밀도가 높아집니다.\n");
-				f += 1;
-			}
-			else {
-				printf("친밀도는 그대로입니다.\n");
-			}
-			if (f < 0) {
-				f = 0;
-			}
-			if (f > 4) {
-				f = 4;
-			}
-			printf("현재 친밀도:%d\n", f);
+		int g, d = rand() % 6 + 1;
+printf("어떤 상호작용을 하시겠습니까?\n");
+printf("0. 아무것도 하지 않음 1. 긁어 주기");
+int menu_idx = 1;
+if (owned_mouse) { menu_idx++; printf(" %d. 장난감 쥐로 놀아주기", menu_idx); }
+if (owned_laser) { menu_idx++; printf(" %d. 레이저 포인터로 놀아주기", menu_idx); }
+printf("\n>> "); scanf_s("%d", &g);
+while (g < 0 || g > menu_idx) {
+    printf(">> "); scanf_s("%d", &g);
+}
+
+if (g == 0) {
+    printf("아무것도 하지 않습니다.\n");
+    printf("기분이 1 감소합니다: %d -> %d\n", mood, (mood - 1 < 0 ? 0 : mood - 1));
+    mood--; if (mood < MOOD_MIN) mood = MOOD_MIN;
+    printf("주사위가 5 이하이면 친밀도가 감소합니다.\n");
+    printf("주사위를 굴립니다. 또르륵...\n");
+    printf("%d이(가) 나왔습니다!\n", d);
+    if (d <= 5) {
+        printf("친밀도가 떨어집니다: %d -> %d\n", f, (f - 1 < 0 ? 0 : f - 1));
+        f--; if (f < FRIEND_MIN) f = FRIEND_MIN;
+    }
+    else {
+        printf("다행히 친밀도는 그대로입니다.\n");
+    }
+}
+else if (g == 1) {
+    if (mood < MOOD_MAX) {
+        printf("쫀떡의 턱을 긁어주었습니다. 기분이 좋아졌습니다: %d -> %d\n", mood, mood + 1);
+        mood++;
+    }
+    else {
+        printf("쫀떡의 턱을 긁어주었습니다. 기분은 이미 최대치입니다.\n");
+    }
+    printf("주사위가 5 이상이면 친밀도가 증가합니다.\n");
+    printf("주사위를 굴립니다. 또르륵...\n");
+    printf("%d이(가) 나왔습니다!\n", d);
+    if (d >= 5) {
+        printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
+        f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
+    }
+    else {
+        printf("친밀도는 그대로입니다.\n");
+    }
+}
+else if (g == 2 && owned_mouse) {
+    if (mood < MOOD_MAX) {
+        printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분이 조금 좋아졌습니다: %d->%d\n", mood, mood + 1);
+        mood++;
+    }
+    else {
+        printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분은 이미 최대치입니다.\n");
+    }
+    printf("주사위가 4 이상이면 친밀도가 증가합니다.\n");
+    printf("주사위를 굴립니다. 또르륵...\n");
+    printf("%d이(가) 나왔습니다!\n", d);
+    if (d >= 4) {
+        printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
+        f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
+    }
+    else {
+        printf("친밀도는 그대로입니다.\n");
+    }
+}
+else if (((g == 3 && owned_laser) || (g == 2 && !owned_mouse && owned_laser))) {
+    int up = (mood <= MOOD_MAX - 2) ? 2 : MOOD_MAX - mood;
+    if (up > 0) {
+        printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분이 꽤 좋아졌습니다: %d->%d\n", mood, mood + up);
+        mood += up;
+    }
+    else {
+        printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분은 이미 최대치입니다.\n");
+    }
+    printf("주사위가 2 이상이면 친밀도가 증가합니다.\n");
+    printf("주사위를 굴립니다. 또르륵...\n");
+    printf("%d이(가) 나왔습니다!\n", d);
+    if (d >= 2) {
+        printf("친밀도가 높아집니다: %d -> %d\n", f, (f + 1 > 4 ? 4 : f + 1));
+        f++; if (f > FRIEND_MAX) f = FRIEND_MAX;
+    }
+    else {
+        printf("친밀도는 그대로입니다.\n");
+    }
+}
+printf("===================================================\n\n");
 			Sleep(500);
 		}
 int gain = ((mood - 1) > 0 ? (mood - 1) : 0) + f;
